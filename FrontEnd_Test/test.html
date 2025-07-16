@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCart | Premium Online Groceries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#34d399',
+                        primaryDark: '#059669',
+                        secondary: '#facc15',
+                        accent: '#3b82f6',
+                        dark: '#0f172a',
+                        light: '#f1f5f9',
+                        muted: '#94a3b8'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-scale': 'pulseScale 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        pulseScale: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-scroll {
+            animation: scroll 30s linear infinite;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        .hero-slide {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .scroll-to-top {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-light text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <i class="fas fa-leaf text-primary text-2xl mr-2"></i>
+                    <span class="text-xl font-bold text-dark">FreshCart</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <div class="relative group">
+                        <button class="text-dark hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            Browse Category <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-96 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-4 hidden group-hover:block z-50">
+                            <div class="grid grid-cols-2 gap-4 px-4">
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Fish & Meats">
+                                    Fish & Meats
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Fruits">
+                                    Fruits
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Home">
+                                    Home
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Dairy">
+                                    Dairy
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Rice">
+                                    Rice
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-sm text-dark hover:bg-light rounded-md">
+                                    <img src="https://via.placeholder.com/24" class="w-6 h-6 rounded-full mr-2" alt="Oil">
+                                    Oil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="text-dark hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="#" class="text-dark hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Products</a>
+                    <a href="#" class="text-dark hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Quick Enquiry</a>
+                </div>
+                
+                <!-- Search Bar and Icons -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative w-64">
+                        <input type="text" class="block w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Search products...">
+                        <button class="absolute right-0 top-0 h-full px-3 text-muted hover:text-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button class="p-2 rounded-full text-muted hover:text-primary focus:outline-none">
+                        <i class="fas fa-user-circle text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <button id="cartButton" class="p-2 rounded-full text-muted hover:text-primary focus:outline-none relative">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+                    <!-- Slider Toggle -->
+                    <button id="sliderToggle" class="p-2 rounded-full text-muted hover:text-primary focus:outline-none">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobileMenuButton" class="p-2 rounded-md text-muted hover:text-primary focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden lg:hidden mobile-menu transform translate-y-[-100%] opacity-0">
+            <div class="pt-2 pb-3 space-y-1 px-4 bg-white shadow-lg">
+                <div class="relative mb-4">
+                    <input type="text" class="block w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Search products...">
+                    <button class="absolute right-0 top-0 h-full px-3 text-muted hover:text-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Browse Category</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Home</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Products</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Quick Enquiry</a>
+                <div class="border-t border-gray-200 pt-4">
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Sign in</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:text-primary hover:bg-light">Create account</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Slider -->
+    <div class="relative bg-gradient-to-r from-primary to-accent overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+                <div class="pt-10 sm:pt-16 lg:pt-8 lg:pb-14">
+                    <div class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                        <div class="sm:text-center lg:text-left">
+                            <div id="heroSlider" class="hero-slide">
+                                <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl animate-slide-up">
+                                    <span class="block">Fresh Groceries</span>
+                                    <span class="block text-secondary">Delivered Fast</span>
+                                </h1>
+                                <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 animate-slide-up" style="animation-delay: 0.2s">
+                                    Hand-picked produce delivered with care.
+                                </p>
+                                <p class="mt-2 text-sm text-white sm:max-w-xl sm:mx-auto md:text-base lg:mx-0 animate-slide-up" style="animation-delay: 0.4s">
+                                    Shop our seasonal selection today.
+                                </p>
+                                <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start animate-slide-up" style="animation-delay: 0.6s">
+                                    <a href="#" class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-light md:py-4 md:text-lg md:px-10">
+                                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                    <a href="#" class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-3 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primaryDark hover:bg-opacity-80 md:py-4 md:text-lg md:px-10">
+                                        About Us <i class="fas fa-arrow-right ml-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 hidden lg:block">
+            <img id="heroImage" class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full animate-fade-in" src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Fresh groceries">
+        </div>
+        <!-- Slider Indicators -->
+        <div class="absolute bottom-8 right-8 flex flex-col space-y-2">
+            <button class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="0"></button>
+            <button class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="1"></button>
+            <button class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="2"></button>
+        </div>
+    </div>
+
+    <!-- Top Categories (Auto-scrolling) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-2xl font-bold text-dark mb-8">Top Categories</h2>
+        <div class="relative overflow-hidden">
+            <div class="flex category-scroll" style="width: 200%">
+                <div class="flex space-x-4" style="width: 50%">
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Fruits">
+                        <span class="font-medium text-dark">Fruits</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Vegetables">
+                        <span class="font-medium text-dark">Vegetables</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Meat">
+                        <span class="font-medium text-dark">Meat</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Dairy">
+                        <span class="font-medium text-dark">Dairy</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Beverages">
+                        <span class="font-medium text-dark">Beverages</span>
+                    </a>
+                </div>
+                <!-- Duplicate for seamless scroll -->
+                <div class="flex space-x-4" style="width: 50%">
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Fruits">
+                        <span class="font-medium text-dark">Fruits</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Vegetables">
+                        <span class="font-medium text-dark">Vegetables</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Meat">
+                        <span class="font-medium text-dark">Meat</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Dairy">
+                        <span class="font-medium text-dark">Dairy</span>
+                    </a>
+                    <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-all min-w-[160px]">
+                        <img src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mb-3 object-cover" alt="Beverages">
+                        <span class="font-medium text-dark">Beverages</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Brands (Auto-scrolling) -->
+    <div class="bg-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-dark mb-8">Top Brands</h2>
+            <div class="relative overflow-hidden">
+                <div class="flex category-scroll" style="width: 200%">
+                    <div class="flex space-x-8" style="width: 50%">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 1">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 2">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 3">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 4">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 5">
+                    </div>
+                    <div class="flex space-x-8" style="width: 50%">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 1">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 2">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 3">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 4">
+                        <img src="https://via.placeholder.com/120" class="h-16 object-contain" alt="Brand 5">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Trending Products -->
+    <div class="bg-light py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-dark">Top Trending Products</h2>
+                <div class="relative">
+                    <select class="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option>Sort by: Popularity</option>
+                        <option>Sort by: Price Low to High</option>
+                        <option>Sort by: Price High to Low</option>
+                        <option>Sort by: Newest</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted">
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="productsGrid">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary animate-pulse-scale">
+                    View All Products
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotional Cards -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="relative bg-cover bg-center h-64 rounded-lg shadow-lg overflow-hidden" style="background-image: url('https://via.placeholder.com/400x300')">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center p-6">
+                    <h3 class="text-xl font-bold text-white">Top Offer</h3>
+                    <p class="text-white">Fresh Fruits</p>
+                    <p class="text-white">Healthy Juice</p>
+                    <a href="#" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-white hover:bg-light">
+                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="relative bg-cover bg-center h-64 rounded-lg shadow-lg overflow-hidden" style="background-image: url('https://via.placeholder.com/400x300')">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center p-6">
+                    <h3 class="text-xl font-bold text-white">Weekly Best Seller</h3>
+                    <p class="text-white">Fresh Fruits</p>
+                    <p class="text-white">Healthy Juice</p>
+                    <a href="#" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-white hover:bg-light">
+                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="relative bg-cover bg-center h-64 rounded-lg shadow-lg overflow-hidden" style="background-image: url('https://via.placeholder.com/400x300')">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center p-6">
+                    <h3 class="text-xl font-bold text-white">Top Offer</h3>
+                    <p class="text-white">Fresh Fruits</p>
+                    <p class="text-white">Healthy Juice</p>
+                    <a href="#" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-white hover:bg-light">
+                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Best Deals with Timer -->
+    <div class="bg-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Promo Card -->
+                <div class="relative bg-cover bg-center h-80 rounded-lg shadow-lg overflow-hidden" style="background-image: url('https://via.placeholder.com/600x400')">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center p-8">
+                        <h3 class="text-2xl font-bold text-white">Special Offer</h3>
+                        <p class="text-white">Get fresh groceries at unbeatable prices!</p>
+                        <a href="#" class="mt-4 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-light">
+                            Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Weekly Deals with Timer -->
+                <div>
+                    <h2 class="text-2xl font-bold text-dark mb-6">Weekly Best Deals</h2>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div id="dealTimer" class="text-center">
+                            <div class="flex justify-center space-x-4">
+                                <div>
+                                    <span id="days" class="block text-2xl font-bold text-primary">00</span>
+                                    <span class="text-sm text-muted">Days</span>
+                                </div>
+                                <div>
+                                    <span id="hours" class="block text-2xl font-bold text-primary">00</span>
+                                    <span class="text-sm text-muted">Hours</span>
+                                </div>
+                                <div>
+                                    <span id="minutes" class="block text-2xl font-bold text-primary">00</span>
+                                    <span class="text-sm text-muted">Minutes</span>
+                                </div>
+                                <div>
+                                    <span id="seconds" class="block text-2xl font-bold text-primary">00</span>
+                                    <span class="text-sm text-muted">Seconds</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 grid grid-cols-2 gap-4">
+                            <div class="bg-light p-4 rounded-md">
+                                <img src="https://via.placeholder.com/100" class="w-full h-24 object-cover rounded-md mb-2" alt="Deal">
+                                <p class="font-medium text-dark">Organic Apples</p>
+                                <p class="text-primary font-bold">$2.99</p>
+                            </div>
+                            <div class="bg-light p-4 rounded-md">
+                                <img src="https://via.placeholder.com/100" class="w-full h-24 object-cover rounded-md mb-2" alt="Deal">
+                                <p class="font-medium text-dark">Free-Range Eggs</p>
+                                <p class="text-primary font-bold">$3.49</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-base text-primary font-semibold tracking-wide uppercase">Why Choose Us</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-dark sm:text-4xl">
+                    A Better Way to Shop for Groceries
+                </p>
+            </div>
+            <div class="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="flex animate-slide-up">
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                            <i class="fas fa-truck text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-dark">Fast Delivery</h3>
+                        <p class="mt-2 text-base text-muted">
+                            Get your groceries delivered in as little as 2 hours.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex animate-slide-up" style="animation-delay: 0.2s">
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                            <i class="fas fa-leaf text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-dark">Farm Fresh</h3>
+                        <p class="mt-2 text-base text-muted">
+                            Sourced directly from local farms for maximum freshness.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex animate-slide-up" style="animation-delay: 0.4s">
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                            <i class="fas fa-recycle text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-dark">Eco-Friendly</h3>
+                        <p class="mt-2 text-base text-muted">
+                            Sustainable packaging and carbon-neutral delivery.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="bg-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-dark mb-8 text-center">What Our Clients Say</h2>
+            <div class="relative overflow-hidden">
+                <div class="flex category-scroll" style="width: 200%">
+                    <div class="flex space-x-6" style="width: 50%">
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">John Doe</p>
+                            <p class="text-muted text-sm text-center">"FreshCart delivers the freshest produce right to my door!"</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">Jane Smith</p>
+                            <p class="text-muted text-sm text-center">"The quality and speed of delivery are unmatched!"</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">Mike Johnson</p>
+                            <p class="text-muted text-sm text-center">"Eco-friendly packaging is a game-changer!"</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-6" style="width: 50%">
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">John Doe</p>
+                            <p class="text-muted text-sm text-center">"FreshCart delivers the freshest produce right to my door!"</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">Jane Smith</p>
+                            <p class="text-muted text-sm text-center">"The quality and speed of delivery are unmatched!"</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
+                            <img src="https://via.placeholder.com/60" class="w-16 h-16 rounded-full mx-auto mb-4" alt="Client">
+                            <p class="text-dark font-medium text-center">Mike Johnson</p>
+                            <p class="text-muted text-sm text-center">"Eco-friendly packaging is a game-changer!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                <div>
+                    <p class="text-4xl font-bold text-primary">455K+</p>
+                    <p class="text-xl font-medium text-dark">Total Products</p>
+                    <p class="text-muted mt-2">Explore our vast selection of premium groceries, sourced with care.</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-bold text-primary">16M+</p>
+                    <p class="text-xl font-medium text-dark">Customer Satisfaction</p>
+                    <p class="text-muted mt-2">Join millions of happy customers who trust FreshCart.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Shop</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">All Products</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">New Arrivals</a></li>
+                        <li><a href="https://via.placeholder.com/120" class="text-muted hover:text-white transition-colors">Deals</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Help</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Shipping</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-muted hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-muted hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f text-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted hover:text-white transition-colors">
+                            <i class="fab fa-pinterest text-lg"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-muted text-sm">Subscribe to our newsletter</p>
+                        <div class="mt-2 flex">
+                            <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l-md text-sm w-full focus:outline-none text-dark bg-light">
+                            <button class="bg-primary text-white px-3 py-2 rounded-r-md text-sm hover:bg-primaryDark">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-muted text-sm">© 2025 FreshCart. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Cart Button (Mobile) -->
+    <div class="fixed bottom-6 right-6 sm:hidden z-50">
+        <button id="mobileCartButton" class="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primaryDark focus:outline-none relative animate-pulse-scale">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="mobileCartCount" class="absolute -top-1 -right-1 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+        </button>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="fixed bottom-6 right-20 sm:right-6 z-50 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primaryDark focus:outline-none opacity-0 transform translate-y-10 scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="flex flex-col h-full">
+            <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                <div class="flex items-start justify-between">
+                    <h2 class="text-lg font-medium text-dark">Shopping Cart</h2>
+                    <button id="closeCart" class="ml-3 h-7 flex items-center">
+                        <i class="fas fa-times text-muted hover:text-dark"></i>
+                    </button>
+                </div>
+                <div class="mt-8">
+                    <ul id="cartItems" class="-my-6 divide-y divide-gray-200">
+                        <li class="py-6 flex justify-center">
+                            <p class="text-muted">Your cart is empty</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+                <div class="flex justify-between text-base font-medium text-dark">
+                    <p>Subtotal</p>
+                    <p id="cartTotal">$0.00</p>
+                </div>
+                <p class="mt-0.5 text-sm text-muted">Shipping and taxes calculated at checkout.</p>
+                <div class="mt-6">
+                    <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-primaryDark">
+                        Checkout
+                    </a>
+                </div>
+                <div class="mt-6 flex justify-center text-sm text-center text-muted">
+                    <p>
+                        or <button id="continueShopping" class="text-primary font-medium hover:text-primaryDark">Continue Shopping</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Organic Avocados",
+                price: 3.99,
+                category: "fruits",
+                image: "https://images.unsplash.com/photo-1594282486552-72a1184e9e4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.5
+            },
+            {
+                id: 2,
+                name: "Grass-Fed Beef",
+                price: 12.99,
+                category: "meat",
+                image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.8
+            },
+            {
+                id: 3,
+                name: "Free-Range Eggs",
+                price: 4.49,
+                category: "dairy",
+                image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7
+            },
+            {
+                id: 4,
+                name: "Organic Strawberries",
+                price: 5.99,
+                category: "fruits",
+                image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.6
+            },
+            {
+                id: 5,
+                name: "Artisan Sourdough",
+                price: 6.49,
+                category: "bakery",
+                image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.9
+            },
+            {
+                id: 6,
+                name: "Organic Spinach",
+                price: 2.99,
+                category: "vegetables",
+                image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.4
+            },
+            {
+                id: 7,
+                name: "Cold-Pressed Olive Oil",
+                price: 9.99,
+                category: "pantry",
+                image: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7
+            },
+            {
+                id: 8,
+                name: "Organic Almond Milk",
+                price: 3.49,
+                category: "dairy",
+                image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.3
+            }
+        ];
+
+        // Hero slider data
+        const heroSlides = [
+            {
+                title: "Fresh Groceries Delivered Fast",
+                subtitle: "Hand-picked produce delivered with care.",
+                description: "Shop our seasonal selection today.",
+                image: "https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "Organic & Sustainable",
+                subtitle: "Eco-friendly groceries for a better planet.",
+                description: "Explore our green collection now.",
+                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "Farm to Table",
+                subtitle: "Freshness you can taste.",
+                description: "Discover local produce today.",
+                image: "https://images.unsplash.com/photo-1498579397066-72c6c2c0e001?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        // Cart state
+        let cart = [];
+        let currentSlide = 0;
+
+        // DOM elements
+        const productsGrid = document.getElementById('productsGrid');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartCount = document.getElementById('cartCount');
+        const mobileCartCount = document.getElementById('mobileCartCount');
+        const cartButton = document.getElementById('cartButton');
+        const mobileCartButton = document.getElementById('mobileCartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const continueShopping = document.getElementById('continueShopping');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const heroSlider = document.getElementById('heroSlider');
+        const heroImage = document.getElementById('heroImage');
+        const sliderDots = document.querySelectorAll('.slider-dot');
+        const scrollToTop = document.getElementById('scrollToTop');
+
+        // Render products
+        function renderProducts() {
+            productsGrid.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md';
+                productCard.innerHTML = `
+                    <div class="relative pb-3/4 h-48">
+                        <img class="absolute h-full w-full object-cover" src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-medium text-dark mb-1">${product.name}</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="flex text-secondary">
+                                ${renderRating(product.rating)}
+                            </div>
+                            <span class="text-muted text-sm ml-1">${product.rating}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-dark">$${product.price.toFixed(2)}</span>
+                            <button class="add-to-cart bg-primary hover:bg-primaryDark text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-300" data-id="${product.id}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+        }
+
+        // Render star rating
+        function renderRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            cartCount.classList.add('animate-pulse-scale');
+            mobileCartCount.classList.add('animate-pulse-scale');
+            setTimeout(() => {
+                cartCount.classList.remove('animate-pulse-scale');
+                mobileCartCount.classList.remove('animate-pulse-scale');
+            }, 1500);
+        }
+
+        // Update cart UI
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                cartCount.classList.remove('hidden');
+                mobileCartCount.textContent = totalItems;
+                mobileCartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+                mobileCartCount.classList.add('hidden');
+            }
+            
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li class="py-6 flex justify-center"><p class="text-muted">Your cart is empty</p></li>';
+                cartTotal.textContent = '$0.00';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('li');
+                cartItem.className = 'py-6 flex';
+                cartItem.innerHTML = `
+                    <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="ml-4 flex-1 flex flex-col">
+                        <div>
+                            <div class="flex justify-between text-base font-medium text-dark">
+                                <h3>${item.name}</h3>
+                                <p class="ml-4">$${itemTotal.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-end justify-between text-sm">
+                            <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                                <button class="decrease-quantity px-2 py-1 bg-gray-100 text-dark hover:bg-gray-200" data-id="${item.id}">-</button>
+                                <span class="px-2">${item.quantity}</span>
+                                <button class="increase-quantity px-2 py-1 bg-gray-100 text-dark hover:bg-gray-200" data-id="${item.id}">+</button>
+                            </div>
+                            <button class="remove-item font-medium text-primary hover:text-primaryDark" data-id="${item.id}">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === productId);
+                    item.quantity += 1;
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === productId);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                    } else {
+                        cart = cart.filter(item => item.id !== productId);
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    cart = cart.filter(item => item.id !== productId);
+                    updateCart();
+                });
+            });
+        }
+
+        // Toggle cart sidebar
+        function toggleCart() {
+            cartSidebar.classList.toggle('translate-x-full');
+            gsap.to(cartSidebar, { x: cartSidebar.classList.contains('translate-x-full') ? '100%' : 0, duration: 0.3 });
+        }
+
+        // Hero slider
+        function updateHeroSlide(index) {
+            const slide = heroSlides[index];
+            heroSlider.innerHTML = `
+                <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl animate-slide-up">
+                    <span class="block">${slide.title.split(' ')[0]}</span>
+                    <span class="block text-secondary">${slide.title.split(' ').slice(1).join(' ')}</span>
+ числі
+
+                </h1>
+                <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 animate-slide-up" style="animation-delay: 0.2s">
+                    ${slide.subtitle}
+                </p>
+                <p class="mt-2 text-sm text-white sm:max-w-xl sm:mx-auto md:text-base lg:mx-0 animate-slide-up" style="animation-delay: 0.4s">
+                    ${slide.description}
+                </p>
+                <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start animate-slide-up" style="animation-delay: 0.6s">
+                    <a href="#" class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-light md:py-4 md:text-lg md:px-10">
+                        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#" class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-3 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primaryDark hover:bg-opacity-80 md:py-4 md:text-lg md:px-10">
+                        About Us <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            `;
+            heroImage.src = slide.image;
+            sliderDots.forEach(dot => dot.classList.remove('opacity-100'));
+            sliderDots[index].classList.add('opacity-100');
+        }
+
+        // Auto-slide hero
+        function startHeroSlider() {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % heroSlides.length;
+                updateHeroSlide(currentSlide);
+            }, 5000);
+        }
+
+        // Timer for weekly deals
+        function startTimer() {
+            const endDate = new Date('2025-07-07T23:59:59').getTime();
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = endDate - now;
+                
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById('dealTimer').innerHTML = '<p class="text-red-500">Deal Ended!</p>';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // Scroll to top
+        function handleScroll() {
+            if (window.scrollY > 300) {
+                scrollToTop.classList.remove('opacity-0', 'translate-y-10');
+            } else {
+                scrollToTop.classList.add('opacity-0', 'translate-y-10');
+            }
+        }
+
+        // Event listeners
+        cartButton.addEventListener('click', toggleCart);
+        mobileCartButton.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+        continueShopping.addEventListener('click', toggleCart);
+        
+        mobileMenuButton.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('translate-y-[-100%]');
+            gsap.to(mobileMenu, {
+                y: isHidden ? 0 : '-100%',
+                opacity: isHidden ? 1 : 0,
+                duration: 0.3,
+                onComplete: () => mobileMenu.classList.toggle('hidden')
+            });
+        });
+
+        sliderDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                currentSlide = parseInt(dot.getAttribute('data-slide'));
+                updateHeroSlide(currentSlide);
+            });
+        });
+
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        window.addEventListener('scroll', handleScroll);
+
+        // GSAP animations
+        gsap.from('.product-card', {
+            scrollTrigger: {
+                trigger: '#productsGrid',
+                start: 'top 80%',
+            },
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 0.8
+        });
+
+        // Initialize
+        renderProducts();
+        updateCart();
+        updateHeroSlide(0);
+        startHeroSlider();
+        startTimer();
+    </script>
+</body>
+</html>

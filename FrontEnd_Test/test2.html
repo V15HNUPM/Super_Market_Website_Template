@@ -1,0 +1,149 @@
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // Stats counter animation
+        function startStatsCounter() {
+            const counters = [
+                { id: 'productCounter', end: 10000, duration: 2 },
+                { id: 'customerCounter', end: 500000, duration: 2.5 },
+                { id: 'deliveryCounter', end: 750000, duration: 3 }
+            ];
+
+            counters.forEach(counter => {
+                gsap.to(`#${counter.id}`, {
+                    innerText: counter.end,
+                    duration: counter.duration,
+                    ease: 'power1.out',
+                    snap: { innerText: 1 },
+                    scrollTrigger: {
+                        trigger: `#${counter.id}`,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    onUpdate: function () {
+                        document.getElementById(counter.id).textContent = Math.round(this.targets()[0].innerText).toLocaleString();
+                    }
+                });
+            });
+        }
+
+        // GSAP animations for products
+        function initProductAnimations() {
+            gsap.from('.product-card', {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '#productsGrid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        }
+
+        // GSAP animation for testimonials auto-scroll
+        function initTestimonialSlider() {
+            const slider = document.querySelector('.testimonial-slider');
+            const cards = document.querySelectorAll('.testimonial-slider > div');
+            const totalWidth = Array.from(cards).reduce((sum, card) => sum + card.offsetWidth + 24, 0); // Include gap
+
+            gsap.to(slider, {
+                x: `-${totalWidth}px`,
+                duration: 20,
+                ease: 'linear',
+                repeat: -1,
+                modifiers: {
+                    x: gsap.utils.wrap(0, totalWidth)
+                },
+                onStart: () => {
+                    // Clone cards for seamless loop
+                    cards.forEach(card => {
+                        const clone = card.cloneNode(true);
+                        slider.appendChild(clone);
+                    });
+                }
+            });
+        }
+
+        // Scroll to top functionality
+        function initScrollToTop() {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    gsap.to(scrollToTop, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                } else {
+                    gsap.to(scrollToTop, {
+                        opacity: 0,
+                        y: 10,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                }
+            });
+
+            scrollToTop.addEventListener('click', () => {
+                gsap.to(window, {
+                    scrollTo: 0,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+        }
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            if (isOpen) {
+                gsap.to(mobileMenu, {
+                    y: '-100%',
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: () => mobileMenu.classList.add('hidden')
+                });
+            } else {
+                mobileMenu.classList.remove('hidden');
+                gsap.to(mobileMenu, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            }
+        });
+
+        // Cart button listeners
+        cartButton.addEventListener('click', toggleCart);
+        mobileCartButton.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+        continueShopping.addEventListener('click', toggleCart);
+
+        // Hero slider dots
+        sliderDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                currentSlide = parseInt(dot.getAttribute('data-slide'));
+                updateHeroSlide(currentSlide);
+            });
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateHeroSlide(currentSlide);
+            startHeroSlider();
+            startTimer();
+            startStatsCounter();
+            initTestimonialSlider();
+            initScrollToTop();
+        });
+    </script>
+</body>
+</html>

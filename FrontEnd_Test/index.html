@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCart | Premium Online Groceries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4ade80',
+                        primaryDark: '#22c55e',
+                        secondary: '#f59e0b',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .mobile-menu {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-leaf text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-dark">FreshCart</span>
+                    </div>
+                    
+                    <!-- Desktop Navigation -->
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                                Categories <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 hidden group-hover:block z-50">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Fruits & Vegetables</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meat & Poultry</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dairy & Eggs</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Bakery</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Beverages</a>
+                            </div>
+                        </div>
+                        <a href="#" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Deals</a>
+                        <a href="#" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Recipes</a>
+                    </div>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="hidden sm:flex items-center mx-4 flex-1 max-w-md">
+                    <div class="relative w-full">
+                        <input type="text" class="block w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Search products...">
+                        <button class="absolute right-0 top-0 h-full px-3 text-gray-500 hover:text-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- User Actions -->
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button class="p-1 rounded-full text-gray-500 hover:text-primary focus:outline-none">
+                        <i class="fas fa-user-circle text-xl"></i>
+                    </button>
+                    
+                    <!-- Cart -->
+                    <div class="ml-4 relative">
+                        <button id="cartButton" class="p-1 rounded-full text-gray-500 hover:text-primary focus:outline-none relative">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button id="mobileMenuButton" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-primary hover:bg-gray-100 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden sm:hidden mobile-menu">
+            <div class="pt-2 pb-3 space-y-1 px-4">
+                <div class="relative mb-4">
+                    <input type="text" class="block w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Search products...">
+                    <button class="absolute right-0 top-0 h-full px-3 text-gray-500 hover:text-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Categories</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Deals</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Recipes</a>
+                <div class="border-t border-gray-200 pt-4">
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Sign in</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Create account</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-primary to-primaryDark overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+                <div class="pt-10 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
+                    <div class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                        <div class="sm:text-center lg:text-left">
+                            <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
+                                <span class="block">Fresh groceries</span>
+                                <span class="block text-secondary">delivered to your door</span>
+                            </h1>
+                            <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                                Discover premium quality produce, hand-picked and delivered with care. Shop our seasonal selection today.
+                            </p>
+                            <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                                <div class="rounded-md shadow">
+                                    <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                                        Shop Now
+                                    </a>
+                                </div>
+                                <div class="mt-3 sm:mt-0 sm:ml-3">
+                                    <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primaryDark hover:bg-opacity-80 md:py-4 md:text-lg md:px-10">
+                                        View Deals
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 hidden lg:block">
+            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" alt="Fresh groceries">
+        </div>
+    </div>
+
+    <!-- Category Highlights -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-2xl font-bold text-dark mb-8">Shop by Category</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+            <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-shadow">
+                <div class="bg-green-100 p-3 rounded-full mb-3">
+                    <i class="fas fa-apple-alt text-primary text-2xl"></i>
+                </div>
+                <span class="font-medium text-gray-800">Fruits</span>
+            </a>
+            <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-shadow">
+                <div class="bg-green-100 p-3 rounded-full mb-3">
+                    <i class="fas fa-carrot text-orange-500 text-2xl"></i>
+                </div>
+                <span class="font-medium text-gray-800">Vegetables</span>
+            </a>
+            <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-shadow">
+                <div class="bg-red-100 p-3 rounded-full mb-3">
+                    <i class="fas fa-drumstick-bite text-red-500 text-2xl"></i>
+                </div>
+                <span class="font-medium text-gray-800">Meat</span>
+            </a>
+            <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-shadow">
+                <div class="bg-yellow-100 p-3 rounded-full mb-3">
+                    <i class="fas fa-cheese text-yellow-500 text-2xl"></i>
+                </div>
+                <span class="font-medium text-gray-800">Dairy</span>
+            </a>
+            <a href="#" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center hover:shadow-md transition-shadow">
+                <div class="bg-blue-100 p-3 rounded-full mb-3">
+                    <i class="fas fa-wine-bottle text-blue-500 text-2xl"></i>
+                </div>
+                <span class="font-medium text-gray-800">Beverages</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Trending Products -->
+    <div class="bg-gray-50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-dark">Top Trending Products</h2>
+                <div class="relative">
+                    <select class="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option>Sort by: Popularity</option>
+                        <option>Sort by: Price Low to High</option>
+                        <option>Sort by: Price High to Low</option>
+                        <option>Sort by: Newest</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="productsGrid">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    View All Products
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-primary font-semibold tracking-wide uppercase">Why choose us</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-dark sm:text-4xl">
+                    A better way to shop for groceries
+                </p>
+            </div>
+
+            <div class="mt-10">
+                <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                                <i class="fas fa-truck text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg leading-6 font-medium text-dark">Fast Delivery</h3>
+                            <p class="mt-2 text-base text-gray-600">
+                                Get your groceries delivered in as little as 2 hours from order time.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                                <i class="fas fa-leaf text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg leading-6 font-medium text-dark">Farm Fresh</h3>
+                            <p class="mt-2 text-base text-gray-600">
+                                Sourced directly from local farms for maximum freshness and quality.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+                                <i class="fas fa-recycle text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg leading-6 font-medium text-dark">Eco-Friendly</h3>
+                            <p class="mt-2 text-base text-gray-600">
+                                Sustainable packaging and carbon-neutral delivery options available.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Shop</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">All Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Deals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Help</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-400 text-sm">Subscribe to our newsletter</p>
+                        <div class="mt-2 flex">
+                            <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l-md text-sm w-full focus:outline-none text-dark">
+                            <button class="bg-primary text-white px-3 py-2 rounded-r-md text-sm hover:bg-primaryDark">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2023 FreshCart. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                    <img src="https://via.placeholder.com/40x25" alt="Payment method" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Cart Button (Mobile) -->
+    <div class="fixed bottom-6 right-6 sm:hidden z-50">
+        <button id="mobileCartButton" class="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primaryDark focus:outline-none relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="mobileCartCount" class="absolute -top-1 -right-1 bg-secondary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+        </button>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="flex flex-col h-full">
+            <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                <div class="flex items-start justify-between">
+                    <h2 class="text-lg font-medium text-dark">Shopping cart</h2>
+                    <button id="closeCart" class="ml-3 h-7 flex items-center">
+                        <i class="fas fa-times text-gray-500 hover:text-dark"></i>
+                    </button>
+                </div>
+
+                <div class="mt-8">
+                    <div class="flow-root">
+                        <ul id="cartItems" class="-my-6 divide-y divide-gray-200">
+                            <!-- Cart items will be inserted here by JavaScript -->
+                            <li class="py-6 flex justify-center">
+                                <p class="text-gray-500">Your cart is empty</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+                <div class="flex justify-between text-base font-medium text-dark">
+                    <p>Subtotal</p>
+                    <p id="cartTotal">$0.00</p>
+                </div>
+                <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                <div class="mt-6">
+                    <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-primaryDark">
+                        Checkout
+                    </a>
+                </div>
+                <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
+                    <p>
+                        or <button id="continueShopping" class="text-primary font-medium hover:text-primaryDark">Continue Shopping</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Organic Avocados",
+                price: 3.99,
+                category: "fruits",
+                image: "https://images.unsplash.com/photo-1594282486552-72a1184e9e4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.5
+            },
+            {
+                id: 2,
+                name: "Grass-Fed Beef",
+                price: 12.99,
+                category: "meat",
+                image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.8
+            },
+            {
+                id: 3,
+                name: "Free-Range Eggs",
+                price: 4.49,
+                category: "dairy",
+                image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7
+            },
+            {
+                id: 4,
+                name: "Organic Strawberries",
+                price: 5.99,
+                category: "fruits",
+                image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.6
+            },
+            {
+                id: 5,
+                name: "Artisan Sourdough",
+                price: 6.49,
+                category: "bakery",
+                image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.9
+            },
+            {
+                id: 6,
+                name: "Organic Spinach",
+                price: 2.99,
+                category: "vegetables",
+                image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.4
+            },
+            {
+                id: 7,
+                name: "Cold-Pressed Olive Oil",
+                price: 9.99,
+                category: "pantry",
+                image: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7
+            },
+            {
+                id: 8,
+                name: "Organic Almond Milk",
+                price: 3.49,
+                category: "dairy",
+                image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.3
+            }
+        ];
+
+        // Cart state
+        let cart = [];
+        
+        // DOM elements
+        const productsGrid = document.getElementById('productsGrid');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartCount = document.getElementById('cartCount');
+        const mobileCartCount = document.getElementById('mobileCartCount');
+        const cartButton = document.getElementById('cartButton');
+        const mobileCartButton = document.getElementById('mobileCartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const continueShopping = document.getElementById('continueShopping');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // Render products
+        function renderProducts() {
+            productsGrid.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md';
+                productCard.innerHTML = `
+                    <div class="relative pb-3/4 h-48">
+                        <img class="absolute h-full w-full object-cover" src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-medium text-dark mb-1">${product.name}</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="flex text-yellow-400">
+                                ${renderRating(product.rating)}
+                            </div>
+                            <span class="text-gray-500 text-sm ml-1">${product.rating}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-dark">$${product.price.toFixed(2)}</span>
+                            <button class="add-to-cart bg-primary hover:bg-primaryDark text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-300" data-id="${product.id}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Add event listeners to "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+        }
+        
+        // Render star rating
+        function renderRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+        
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            
+            // Add animation to cart button
+            cartCount.classList.add('cart-pulse');
+            mobileCartCount.classList.add('cart-pulse');
+            setTimeout(() => {
+                cartCount.classList.remove('cart-pulse');
+                mobileCartCount.classList.remove('cart-pulse');
+            }, 1500);
+        }
+        
+        // Update cart UI
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                cartCount.classList.remove('hidden');
+                mobileCartCount.textContent = totalItems;
+                mobileCartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+                mobileCartCount.classList.add('hidden');
+            }
+            
+            // Update cart items
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li class="py-6 flex justify-center"><p class="text-gray-500">Your cart is empty</p></li>';
+                cartTotal.textContent = '$0.00';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('li');
+                cartItem.className = 'py-6 flex';
+                cartItem.innerHTML = `
+                    <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="ml-4 flex-1 flex flex-col">
+                        <div>
+                            <div class="flex justify-between text-base font-medium text-dark">
+                                <h3>${item.name}</h3>
+                                <p class="ml-4">$${itemTotal.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-end justify-between text-sm">
+                            <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                                <button class="decrease-quantity px-2 py-1 bg-gray-100 text-dark hover:bg-gray-200" data-id="${item.id}">-</button>
+                                <span class="px-2">${item.quantity}</span>
+                                <button class="increase-quantity px-2 py-1 bg-gray-100 text-dark hover:bg-gray-200" data-id="${item.id}">+</button>
+                            </div>
+                            <button class="remove-item font-medium text-primary hover:text-primaryDark" data-id="${item.id}">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Update total
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === productId);
+                    item.quantity += 1;
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === productId);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                    } else {
+                        cart = cart.filter(item => item.id !== productId);
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    cart = cart.filter(item => item.id !== productId);
+                    updateCart();
+                });
+            });
+        }
+        
+        // Toggle cart sidebar
+        function toggleCart() {
+            cartSidebar.classList.toggle('translate-x-full');
+        }
+        
+        // Event listeners
+        cartButton.addEventListener('click', toggleCart);
+        mobileCartButton.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+        continueShopping.addEventListener('click', toggleCart);
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Initialize
+        renderProducts();
+        updateCart();
+    </script>
+</body>
+</html>
